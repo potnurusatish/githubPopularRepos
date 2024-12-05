@@ -1,8 +1,10 @@
 import {Component} from 'react'
-
 import Loader from 'react-loader-spinner'
+
 import LanguageFilterItem from '../LanguageFilterItem'
 import RepositoryItem from '../RepositoryItem'
+
+import './index.css'
 
 const languageFiltersData = [
   {id: 'ALL', language: 'All'},
@@ -62,29 +64,31 @@ class GithubPopularRepos extends Component {
     this.setState({activeLanguageId}, this.getPopularRepos)
   }
 
-  renderLanguagesList = () => (
-    <ul>
-      {languageFiltersData.map(eachLanguage => (
-        <LanguageFilterItem
-          languageDetails={eachLanguage}
-          key={eachLanguage.id}
-          updateActiveLanguageId={this.updateActiveLanguageId}
-        />
-      ))}
-    </ul>
-  )
+  renderLanguagesList = () => {
+    const {activeLanguageId} = this.state
+    return (
+      <ul className="filters-list">
+        {languageFiltersData.map(eachLanguage => (
+          <LanguageFilterItem
+            languageDetails={eachLanguage}
+            key={eachLanguage.id}
+            isActive={eachLanguage.id === activeLanguageId}
+            updateActiveLanguageId={this.updateActiveLanguageId}
+          />
+        ))}
+      </ul>
+    )
+  }
 
   renderReposListView = () => {
     const {reposList} = this.state
 
     return (
-      <div>
-        <ul>
-          {reposList.map(eachRepo => (
-            <RepositoryItem repoDetails={eachRepo} key={eachRepo.id} />
-          ))}
-        </ul>
-      </div>
+      <ul className="repositories-list">
+        {reposList.map(eachRepo => (
+          <RepositoryItem repoDetails={eachRepo} key={eachRepo.id} />
+        ))}
+      </ul>
     )
   }
 
@@ -95,10 +99,14 @@ class GithubPopularRepos extends Component {
   )
 
   renderApiFailureView = () => (
-    <img
-      src="https://assets.ccbp.in/frontend/react-js/api-failure-view.png"
-      alt="failure view"
-    />
+    <div className="failure-view-container">
+      <img
+        src="https://assets.ccbp.in/frontend/react-js/api-failure-view.png"
+        alt="failure view"
+        className="failure-view-image"
+      />
+      <h1 className="error-message">Something Went Wrong</h1>
+    </div>
   )
 
   renderReposList = () => {
@@ -118,10 +126,12 @@ class GithubPopularRepos extends Component {
 
   render() {
     return (
-      <div>
-        <h1>Popular</h1>
-        {this.renderLanguagesList()}
-        {this.renderReposList()}
+      <div className="app-container">
+        <div className="responsive-container">
+          <h1 className="heading">Popular</h1>
+          {this.renderLanguagesList()}
+          {this.renderReposList()}
+        </div>
       </div>
     )
   }
